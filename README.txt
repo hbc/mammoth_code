@@ -1,5 +1,5 @@
 ===============
-python_template
+mammoth
 ===============
 
-Insert text describing your package here.
+Package created to help Church's Lab to find changes in Mammoth genomes.
