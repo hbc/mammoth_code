@@ -2,14 +2,18 @@
 import os
 import requests, sys
 import yaml
+import logging
 
 import gffutils
 
 from collections import defaultdict
 
+import mammoth.logger as mylog
+
 server = "http://rest.ensembl.org{ext}"
 ext = "/sequence/id/{id}?type=cds"
 prot = "/sequence/id/{id}?type=protein"
+
 
 def query_exon(id):
     r = requests.get(server.format(ext=ext.format(id=id)), headers={ "Content-Type" : "application/json"})

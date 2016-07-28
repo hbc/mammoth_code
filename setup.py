@@ -10,7 +10,7 @@ setup(
     author_email='',
     packages=['mammoth'],
     url='',
-    install_requires = ['gffutils', 'joblib', 'toolz', 'logging', 'uuid', 'tempfile'],
+    install_requires = ['gffutils', 'joblib', 'toolz', 'logging', 'uuid'],
     license='See LICENSE.txt',
     description='',
      scripts=['scripts/mammoth-run.py'],

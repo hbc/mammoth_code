@@ -5,7 +5,8 @@ import os
 import subprocess
 import logging
 
-logger = logging.getLogger("run")
+from mammoth import logger as mylog
+logger = mylog.getLogger()
 
 
 def run(cmd, data=None, checks=None, region=None, log_error=True,

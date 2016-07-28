@@ -1,4 +1,7 @@
 import logging
+import requests
+requests.packages.urllib3.disable_warnings()
+
 from mammoth import utils
 try:
     from colorlog import ColoredFormatter
@@ -7,7 +10,7 @@ except:
 import os
 
 
-def getLogger(name):
+def getLogger(name="mammoth"):
     return logging.getLogger(__name__)
 
 def set_format(frmt, frmt_col=None, datefmt=None):
@@ -34,7 +37,7 @@ def initialize_logger(output_dir, debug, level=False):
     numeric_level = getattr(logging, "DEBUG", None)
     if not debug:
         numeric_level = getattr(logging, "INFO", None)
-    logger = logging.getLogger()
+    logger = logging.getLogger("mammoth")
     logger.setLevel(numeric_level)
     # create console handler and set level to info
     handler = logging.StreamHandler()
@@ -46,9 +49,10 @@ def initialize_logger(output_dir, debug, level=False):
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
+
     if output_dir:
         # create error file handler and set level to error
-        handler = logging.FileHandler(os.path.join(output_dir, "error.log"), "w", encoding=None, delay="true")
+        handler = logging.FileHandler(os.path.join(output_dir, "error.log"), "w", encoding=None)
         handler.setLevel(logging.ERROR)
         formatter = set_format(FORMAT, COLOR_FORMAT, datefmt=DATE_FRT)
         handler.setFormatter(formatter)
@@ -61,3 +65,7 @@ def initialize_logger(output_dir, debug, level=False):
         handler.setFormatter(formatter)
         logger.addHandler(handler)
 
+        requests_log = logging.getLogger("requests")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.addHandler(handler)
+        requests_log.propagate = True

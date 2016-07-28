@@ -36,7 +36,7 @@ def add_subparser_mirbuster(subparsers):
                         help="dir of output files")
     parser.add_argument("--gtf", help="gtf file with precursor position to genome.", required=1)
     parser.add_argument("--db", help="Blast database.", required=1)
-    parser.add_argument("-n", help="Jobs.", type=int)
+    parser.add_argument("-n", help="Jobs.", type=int, default=1)
     parser = _add_debug_option(parser)
     return parser
 

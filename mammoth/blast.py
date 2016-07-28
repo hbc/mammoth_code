@@ -7,7 +7,7 @@ import mammoth.logger as mylog
 from mammoth import utils, do
 from mammoth.ensembl import query_exon, query_prot
 
-logger = mylog.getLogger(__name__)
+logger = mylog.getLogger()
 
 def _read_json(st):
     jstxt = ""
@@ -28,6 +28,8 @@ def find(s, ch = "X"):
 def _identify_mut(qseq, matches, hit, start, tx, prot):
     mism = find(matches)
     res = dict()
+    if len(mism) > 10:
+        return {'positions': res}
     for m in mism:
         abs_pos = start + m
         aa = int(abs_pos / 3) + 1
@@ -74,6 +76,7 @@ def _consistency(res, gene):
         logger.debug(gene['size'] * 2 > size)
         if gene['size'] * 2 > size:
             return res, qc
+    return None, qc
 
 def _parse_algn(algn, tx, prot, gene):
     res = dict()

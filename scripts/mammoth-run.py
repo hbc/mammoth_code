@@ -17,7 +17,6 @@ def _format(info):
     qc = "%s/%s %s %s" % (info[4]['mapped'], info[4]['annotated'], info[4]['gap'], missing)
     return "%s %s %s %s %s %s" % (info[0], info[1], info[2], info[5], changes, qc)
 
-
 def _chunk(l, n):
     i = 0
     idx = []
@@ -48,7 +47,7 @@ def run_smartly(genes, args):
         list_genes.append(out)
     logger.info("Running %s genes in %s chunks" % (len(genes.keys()), len(list_genes)))
     with Parallel(n_jobs=args.n) as parallel:
-        matches = parallel(delayed(blast_genes)(out, args.db, args.out) for out in list_genes )
+        matches = parallel(delayed(blast_genes)(out, args.db, args.out) for out in list_genes)
     return _join(matches)
 
 def run(args):
@@ -71,7 +70,7 @@ def run(args):
 if __name__ == "__main__":
     kwargs = parse_cl(sys.argv[1:])
     initialize_logger(kwargs['args'].out, kwargs['args'].debug, kwargs['args'].print_debug)
-    logger = mylog.getLogger(__name__)
+    logger = mylog.getLogger()
     start = time.time()
     if "annotate" in kwargs:
         logger.info("Run annotation")
