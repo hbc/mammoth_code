@@ -10,7 +10,7 @@ setup(
     author_email='',
     packages=['mammoth'],
     url='',
-    install_requires = ['pyensembl'],
+    install_requires = ['gffutils', 'joblib', 'toolz', 'logging', 'uuid', 'tempfile'],
     license='See LICENSE.txt',
     description='',
      scripts=['scripts/mammoth-run.py'],
