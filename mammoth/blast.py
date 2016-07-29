@@ -38,6 +38,9 @@ def _identify_mut(qseq, matches, hit, start, tx, prot):
         shift = (aa - 1) * 3 - abs_pos
         logger.debug("shift %s" % shift)
         logger.debug("seq %s" % qseq)
+        logger.debug("prot %s aas" % len(prot['seq']))
+        if aa > len(prot['seq']):
+            continue
         new_aa = triplet.get(qseq[(m+shift):(m+shift+3)], None)
         ref_aa = prot['seq'][aa-1]
         ref_tri = tx['seq'][(aa-1)*3:aa*3]
@@ -119,9 +122,15 @@ def blast_genes(genes, db, outdir):
     cmd = "blastn -query {fn} -db {db} -task blastn -qcov_hsp_perc 90 -outfmt 13 > {out}"
     for g in genes:
         for t in genes[g]:
+            fn = os.path.join(outdir, "%s.input" % t)
+            out = "%s.blastn" % fn
+            out_final = "%s.changes" % fn
+            if utils.file_exists(out_final):
+                changes = yaml.load(open(out_final))
+                genes[g][t]['changes'] = changes
+                continue
             tx_seq = query_exon(t)
             protein = query_prot(t)
-            fn = os.path.join(outdir, "%s.input" % t)
             exon_sort = dict(sorted(genes[g][t]['exons'].iteritems()))
             if not utils.file_exists(fn):
                 with open(fn, 'w') as ih:
@@ -129,17 +138,13 @@ def blast_genes(genes, db, outdir):
                         seq = query_exon(exon_sort[e])
                         logger.debug(seq)
                         print >>ih, ">%s\n%s" % (seq["id"], seq["seq"])
-            out = "%s.blastn" % fn
             if not utils.file_exists(out):
                 do.run(cmd.format(**locals()))
-            out_final = "%s.changes" % fn
             if not utils.file_exists(out_final):
                 algn = _read_json(open(out).read())
                 changes = _parse_algn(algn, tx_seq, protein, genes[g][t])
                 with open(out_final, 'w') as outh:
                     yaml.dump(changes, outh, default_flow_style=False, allow_unicode=False)
-            else:
-                changes = yaml.load(open(out_final))
             genes[g][t]['changes'] = changes
     return genes
 

@@ -35,6 +35,7 @@ def _join(matches):
     return out
 
 def run_smartly(genes, args):
+    logger.info("Runnning %s genes" % len(genes.keys()))
     if args.n == 1:
         matches = blast_genes(genes, args.db, args.out)
         return matches
@@ -46,8 +47,7 @@ def run_smartly(genes, args):
         [out.update({k: genes[k]}) for k in genes.keys()[i[0]:i[1]]]
         list_genes.append(out)
     logger.info("Running %s genes in %s chunks" % (len(genes.keys()), len(list_genes)))
-    with Parallel(n_jobs=args.n) as parallel:
-        matches = parallel(delayed(blast_genes)(out, args.db, args.out) for out in list_genes)
+    matches = Parallel(args.n)(delayed(blast_genes)(out, args.db, args.out) for out in list_genes)
     return _join(matches)
 
 def run(args):
