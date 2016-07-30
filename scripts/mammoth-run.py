@@ -59,6 +59,8 @@ def run(args):
         print >>outh, " ".join(["gene", "tx", "exon", "number", "tx_pos", "ref_nc", "ref_new", "aa_pos", "ref_aa", "new_aa", "mapped/annotated", "found_gap", "missing_exons"])
         for m in matches:
             for t in matches[m]:
+                if not matches[m][t]['changes']:
+                    continue
                 ratio = matches[m][t]['changes']['mapped_exons']
                 for e in matches[m][t]['changes']:
                     if "changes" in matches[m][t]['changes'][e]:
