@@ -47,7 +47,7 @@ def _identify_mut(qseq, matches, hit, start, tx, prot):
         new_tri = qseq[(m+shift):(m+shift+3)]
         logger.debug("triplete %s->%s with aa %s->%s at %s" % (ref_tri, new_tri, ref_aa, new_aa, aa))
         if ref_aa != new_aa:
-            res[m]={'ref_nc': ref_tri, 'ref_aa': ref_aa, 'new_nc': new_tri, 'new_aa': new_aa, 'aa_pos': aa, 'tx_pos': abs_pos}
+            res[m]={'ref_nc': ref_tri, 'ref_aa': ref_aa, 'new_nc': new_tri, 'new_aa': new_aa, 'aa_pos': aa, 'tx_pos': abs_pos, 'mism_pos': m}
     return {'positions': res}
 
 def _consistency(res, gene):
@@ -93,8 +93,8 @@ def _parse_algn(algn, tx, prot, gene):
                 if name in res:
                     break
                 if chrom.find("Un") < 0:
-                    qseq = str(h['hsps'][0]['qseq'])
-                    hseq = str(h['hsps'][0]['hseq'])
+                    qseq = str(h['hsps'][0]['qseq']).upper()
+                    hseq = str(h['hsps'][0]['hseq']).upper()
                     pos_hit = h['hsps'][0]['hit_from']
                     matches = str(h['hsps'][0]['midline']).replace(" ", "X")
                     pos_start = tx["seq"].find(qseq)
