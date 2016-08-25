@@ -26,7 +26,7 @@ def _format(info, exons):
                                      info[3]['aa_pos'], info[3]['ref_aa'], info[3]['new_aa'])
     missing = ",".join(["%s:%s" %  (e, info[4]['missing'][e]) for e in info[4]['missing']])
     qc = "%s/%s %s %s" % (info[4]['mapped'], info[4]['annotated'], info[4]['gap'], missing)
-    return "%s %s %s %s %s %s %s %s" % (info[0], info[1], info[2], info[5], changes, genomic_pos, qc, flank)
+    return "%s %s %s %s %s %s %s %s %s" % (info[0], info[1], info[2], info[5], changes, exons['chrom'], genomic_pos, qc, flank)
 
 def _chunk(l, n):
     i = 0
@@ -44,6 +44,16 @@ def _join(matches):
         for g in i:
             out.update({g: i[g]})
     return out
+
+def _get_cache(fn):
+    cache = {}
+    with open(fn) as inh:
+        for line in inh:
+            line = line.strip()
+            cols = line.split()
+            idx = "%s%s%s%s" % (cols[0], cols[1], cols[2], cols[4])
+            cache[idx] = line
+    return cache
 
 def run_smartly(genes, args):
     logger.info("Runnning %s genes" % len(genes.keys()))
@@ -66,9 +76,11 @@ def run(args):
     genes, exons = ensembl.get_genes(args.gtf)
     matches = run_smartly(genes, args)
     out_file = os.path.join(args.out, "changes.tsv")
+    if os.path.exists(out_file):
+        cache = _get_cache(out_file)
     with open(out_file, 'w') as outh:
         print >>outh, " ".join(["gene", "tx", "exon", "number", "tx_pos", "ref_nc", "ref_new",
-                                "aa_pos", "ref_aa", "new_aa", "genome_pos", "mapped/annotated",
+                                "aa_pos", "ref_aa", "new_aa", "chrom", "genome_pos", "mapped/annotated",
                                 "found_gap", "missing_exons", "flank"])
         for m in matches:
             for t in matches[m]:
@@ -78,6 +90,10 @@ def run(args):
                 for e in matches[m][t]['changes']:
                     if "changes" in matches[m][t]['changes'][e]:
                         for p in matches[m][t]['changes'][e]['changes']['positions']:
+                            idx = "%s%s%s%s" % (m, t, e, p)
+                            if idx in cache:
+                                print >>outh, cache[idx]
+                                continue
                             info = matches[m][t]['changes'][e]['changes']['positions'][p]
                             en = matches[m][t]['changes'][e]['exon_number']
                             print >>outh, _format([m, t, e, info, ratio, en], exons[e])
