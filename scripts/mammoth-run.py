@@ -76,6 +76,7 @@ def run(args):
     genes, exons = ensembl.get_genes(args.gtf)
     matches = run_smartly(genes, args)
     out_file = os.path.join(args.out, "changes.tsv")
+    cache = {}
     if os.path.exists(out_file):
         cache = _get_cache(out_file)
     with open(out_file, 'w') as outh:
