@@ -1,3 +1,8 @@
+cd ~/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1
+mkdir split && cd split
+
+split ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf
+
 
 for F in `ls * | grep -v tsv | grep -v "h$"` ; do
     echo $F
