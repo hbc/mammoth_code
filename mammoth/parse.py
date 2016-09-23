@@ -9,7 +9,7 @@ def parse_cl(in_args):
     parser = argparse.ArgumentParser(description="small RNA analysis")
     sub_cmd = None
     if len(in_args) > 0 and in_args[0] in sub_cmds:
-        subparsers = parser.add_subparsers(help="seqcluster supplemental commands")
+        subparsers = parser.add_subparsers(help="mammoth supplemental commands")
         sub_cmds[in_args[0]](subparsers)
         sub_cmd = in_args[0]
     else:
@@ -36,6 +36,7 @@ def add_subparser_mirbuster(subparsers):
                         help="dir of output files")
     parser.add_argument("--gtf", help="gtf file with precursor position to genome.", required=1)
     parser.add_argument("--db", help="Blast database.", required=1)
+    parser.add_argument("--fasta", help="Blast database.", required=1)
     parser.add_argument("-n", help="Jobs.", type=int, default=1)
     parser = _add_debug_option(parser)
     return parser
