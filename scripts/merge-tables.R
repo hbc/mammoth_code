@@ -2,6 +2,8 @@ lynch = read.csv("../test/Lynch_table.csv")
 wragel = read.table("~/orch/scratch/church_mammoth/res_wrangel/changes.tsv", sep=" ", header=T)
 oimyako = read.table("~/orch/scratch/church_mammoth/res_oimyako/changes.tsv", sep=" ", header=T)
 variants = read.table("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", header=T,sep="\t")
+variants_seq = read.table("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", sep="\t")
+variants$african_region = variants_seq$V3
 
 wragel$id = paste0(wragel$chrom, wragel$genome_pos)
 oimyako$id = paste0(oimyako$chrom, oimyako$genome_pos)
@@ -63,7 +65,8 @@ table = all_w_vc %>%
            vc_gene = gene,vc_change=change,
            M25, M4, Asha, Parvathy, Uno,
            M25_flank = M25.1, M4_flank = M4.1, Asha_flank = Asha.1, 
-           Parvathy_flank = Parvathy.1, Uno_flank = Uno.1
+           Parvathy_flank = Parvathy.1, Uno_flank = Uno.1,
+           vc_african_flank = african_region
            )
 table$wrangel_annotated = gsub("/"," out of ", table$wrangel_annotated)
 table$oimyako_annotated = gsub("/"," out of ", table$oimyako_annotated)
