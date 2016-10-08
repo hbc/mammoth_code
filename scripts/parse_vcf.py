@@ -78,7 +78,10 @@ with open(sys.argv[1]) as inh:
             cols = line.split("\t")
             chrom, pos, alt, ref = cols[0], cols[1], cols[3], cols[4]
             ann = cols[7]
-            snpeff = ann.split(";")[-1].split("|")
+            snpeff = [atr for atr in ann.split(";") if atr.startswith("ANN")]
+            if not snpeff[0]:
+                continue
+            snpeff = snpeff[0].split("|")
             if snpeff[1].find("missense") > -1 or snpeff[1].find("stop") > -1:
                 idx = "%s%s" % (chrom, pos)
                 if idx in cache:

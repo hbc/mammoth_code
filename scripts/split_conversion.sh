@@ -13,7 +13,7 @@ for F in `ls x* | grep -v tsv | grep -v ".h"` ; do
     `cat header $F > $F.h`
     if [ ! -e $F"-parsed-flank.tsv"  ] ; then
         # echo do
-        bsub -eo log/$F.o -W 10:00 -R "rusage[mem=8000]" -n  2 -q parallel  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/parse_vcf.py $F.h
+        bsub -oo log/$F.o -W 10:00 -R "rusage[mem=8000]" -n  2 -q parallel  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/parse_vcf.py $F.h
     fi
 done
 
@@ -23,4 +23,6 @@ grep "^scaffold" *-parsed-flank.tsv | sed 's/^.*-parsed-flank.tsv://'  > merged-
 cat <(grep -w chrom xab-parsed-flank.tsv)  <( cat merged-parsed-flank.tsv) > merged-parsed-flank-wheader.tsv
 
 awk '{start=$2-150; if (start<0){start=0}; print $1"\t"$2-150"\t"$2+150}' ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf |grep -v "##" > merged.bed
+
+bsub -eo log/fasta.o -W 40:00 -R "rusage[mem=8000]" -n  2 -q parallel  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/get_african_sequence.py
 

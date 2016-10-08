@@ -26,6 +26,7 @@ def _get_cache(fn):
 
 out_file = "merged.fa"
 tmp_file = "merged.tmp.fa"
+cache = {}
 if os.path.exists(out_file):
     cache = _get_cache(out_file)
     shutil.move(out_file, tmp_file)
@@ -49,7 +50,7 @@ with open(out_file, "w") as outh:
             a = a.sequence(fi=fasta)
             seq = open(a.seqfn).read().split("\n")
             pre = seq[1][:pos-start-1]
-            nt = seq[1][pos-start]
+            nt = seq[1][pos-start-1]
             post = seq[1][pos-start:]
             # print [pre, nt, pos]
             print >>outh, "%s\t%s\t%s-%s-%s" % (chrom, pos, pre, nt, post)

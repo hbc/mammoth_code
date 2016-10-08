@@ -96,11 +96,12 @@ def _parse_algn(algn, tx, prot, gene):
                     qseq = str(h['hsps'][0]['qseq']).upper()
                     hseq = str(h['hsps'][0]['hseq']).upper()
                     pos_hit = h['hsps'][0]['hit_from']
+                    strand = h['hsps'][0]['hit_strand']
                     matches = str(h['hsps'][0]['midline']).replace(" ", "X")
                     pos_start = tx["seq"].find(qseq)
                     logger.debug(h)
                     res.update({name: {'chr': chrom,'pos': pos_hit, 'matches' : matches,
-                                       'pos_start': pos_start, 'hseq': hseq, 'qseq': qseq}})
+                        'pos_start': pos_start, 'hseq': hseq, 'strand': strand, 'qseq': qseq}})
     res, qc = _consistency(res, gene)
     if res:
         logger.debug("Matches %s out of %s" % (qc['mapped'], qc['annotated']))
