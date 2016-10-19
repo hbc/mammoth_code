@@ -7,7 +7,7 @@ def get_genotype(samples):
     gen = []
     for s in samples:
         var = s.split(":")[0]
-        if var == "1/0":
+        if var == "1/0" or var == "0/1":
             gen.append("Het")
         elif var == "1/1":
             gen.append("Hom")
@@ -78,8 +78,11 @@ with open(sys.argv[1]) as inh:
             cols = line.split("\t")
             chrom, pos, alt, ref = cols[0], cols[1], cols[3], cols[4]
             ann = cols[7]
-            snpeff = ann.split(";")[-1].split("|")
-            if snpeff[1].find("missense") > -1:
+            snpeff = [atr for atr in ann.split(";") if atr.startswith("ANN")]
+            if not snpeff[0]:
+                continue
+            snpeff = snpeff[0].split("|")
+            if snpeff[1].find("missense") > -1 or snpeff[1].find("stop") > -1:
                 idx = "%s%s" % (chrom, pos)
                 if idx in cache:
                     print >>outh, cache[idx]
