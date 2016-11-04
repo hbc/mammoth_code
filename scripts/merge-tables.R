@@ -1,13 +1,15 @@
+library(readr)
 lynch = read.csv("../test/Lynch_table.csv")
-wragel = read.table("~/orch/scratch/church_mammoth/res_wrangel/changes.tsv", sep=" ", header=T)
-oimyako = read.table("~/orch/scratch/church_mammoth/res_oimyako/changes.tsv", sep=" ", header=T)
-variants = read.table("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", header=T,sep="\t")
-variants_seq = read.table("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", sep="\t")
-variants$african_region = variants_seq$V3
+wragel = read_delim("~/orch/scratch/church_mammoth/res_wrangel/changes.tsv", delim =" ")
+oimyako = read_delim("~/orch/scratch/church_mammoth/res_oimyako/changes.tsv", delim=" ")
+variants = read_delim("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", delim="\t")
+variants_seq = read_delim("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", col_names = FALSE, delim="\t")
+variants$african_region = variants_seq$X3
 
 wragel$id = paste0(wragel$chrom, wragel$genome_pos)
 oimyako$id = paste0(oimyako$chrom, oimyako$genome_pos)
-lynch$id = paste0(lynch$loxodonta.scaffold, lynch$position.in.scaffold+1)
+lynch$id = paste0(lynch$loxodonta.scaffold, lynch$position.in.scaffold)
+variants$pos = variants$pos - 1
 variants$id = paste0(variants$chrom, variants$pos)
 
 library(dplyr)
@@ -56,23 +58,26 @@ table = all_w_vc %>%
     select(id, gene=gene.1, tx, exon, exon_number, tx_pos, ref_nc, aa_pos, aa_ref,
            chrom, genome_pos,
            wrangel_new_nc=ref_new.x,wrangel_new_aa = new_aa.x, 
-           wrangel_annotated = mapped.annotated.x, wrangel_found_gap = found_gap.x,
-           wrangel_missing_exons = missing_exons.x, wrangle_flank = flank.x,
+           wrangel_annotated = `mapped/annotated.x`, wrangel_found_gap = found_gap.x,
+           wrangel_missing_exons = missing_exons.x, 
+           wrangel_flank = flank_mammoth.x, wrangle_ref_flank = flank_african.x,
            oimyako_new_nc = ref_new.y, oimyako_new_aa = new_aa.y,
-           oimyako_annotated = mapped.annotated.y, oimyako_found_gap = found_gap.y,
-           oimyako_missing_exons = missing_exons.y, oimyako_flank = flank.y,
+           oimyako_annotated = `mapped/annotated.y`, oimyako_found_gap = found_gap.y,
+           oimyako_missing_exons = missing_exons.y, 
+           oimyako_flank = flank_mammoth.y, oimyako_ref_flank = flank_african.y,
            vc_ref=ref, vc_alt=alt, 
            vc_gene = gene,vc_change=change,
-           M25, M4, Asha, Parvathy, Uno,
-           M25_flank = M25.1, M4_flank = M4.1, Asha_flank = Asha.1, 
-           Parvathy_flank = Parvathy.1, Uno_flank = Uno.1,
+           M25, M4, Wrangel, oimyakon, Asha, Parvathy, Uno,
+           M25_flank = M25_1, M4_flank = M4_1, 
+           Wrangel_flank = Wrangel_1, Oimyako_flank = oimyakon_1, 
+           Asha_flank = Asha_1, 
+           Parvathy_flank = Parvathy_1, Uno_flank = Uno_1,
            vc_african_flank = african_region
            )
 table$wrangel_annotated = gsub("/"," out of ", table$wrangel_annotated)
 table$oimyako_annotated = gsub("/"," out of ", table$oimyako_annotated)
 
 table$is_lynch_table = table$id %in% lynch$id 
-
 
 table$mammoth_genome = rowSums(data.frame(wr=!is.na(table$wrangel_new_aa), 
                                           oi=!is.na(table$oimyako_new_aa),
@@ -83,7 +88,7 @@ table$asian_genome = rowSums(data.frame(  uno=!grepl("None", table$Uno) & !is.na
                                           asha=!grepl("None", table$Asha) & !is.na(table$Asha),
                                           pa=!grepl("None", table$Parvathy) & !is.na(table$Parvathy)))
 
-write.table(table %>% select(-id), "../test/all_genomes.xls", sep="\t", row.names=F)
+write.table(table %>% select(-id) %>% distinct(), "../test/all_genomes.xls", sep="\t", row.names=F)
 
 lynch$is_in_bcbio_analysis = lynch$id %in% variants$id
 write.table(lynch %>% select(-id), "../test/lynch_w_bcbio.xls", sep="\t", row.names=F)
