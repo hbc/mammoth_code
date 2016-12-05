@@ -5,7 +5,7 @@ library(tidyr)
 
 # Parse functional table: remove duplicates, score again genomes, split column
 full = read_tsv("../table/all_genomes_fnc.xls")
-variants_genotype = read_delim("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/batch1-joint-effects-filterSNP-filterINDEL-gatkclean-parsed-genotype.tsv", col_names = TRUE, delim="\t")
+variants_genotype = read_delim("../../mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/batch1-joint-effects-filterSNP-filterINDEL-gatkclean-parsed-genotype.tsv", col_names = TRUE, delim="\t")
 variants_genotype$pos = variants_genotype$pos - 1
 
 full_clean = full %>%
@@ -24,6 +24,7 @@ full_clean$asian_genome = rowSums(data.frame(  uno=!grepl("None", full_clean$Uno
 
 full_clean_gen = inner_join(full_clean %>% mutate(id=paste0(chrom, genome_pos)),
                             variants_genotype %>% mutate(id=paste0(chrom, pos)) %>%
+                                select(-chrom, -pos) %>%
                                 rename(Asha_G=Asha, M25_G=M25, M4_G=M4,
                                        Parvathy_G=Parvathy, Uno_G=Uno,
                                        Wrangel_G=Wrangel, oimyako_G=oimyakon),

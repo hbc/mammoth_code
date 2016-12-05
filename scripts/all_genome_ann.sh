@@ -4,5 +4,6 @@ CrossMap.py bed ~/scratch/church_mammoth/tools/liftover/loxAfr3ToHg19.over.chain
 awk '{print $1"\t"$2+1}' hg19_pos.bed | sort -k1,1 -k2n > hg19_dbnsfp.bed
 java -classpath ~/scratch/church_mammoth/tools/snpEff/db/hg19/dbNSFP search_dbNSFP32a -i hg19_dbnsfp.bed -v hg19 -o hg19_ann.txt
 
-python ~/scratch/church_mammoth/mammoth_code/scripts/merge_ann_table.py  > all_genome.fnc.xls
+cd ..
+~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/merge_func_table.py  > all_genomes_fnc.xls
 

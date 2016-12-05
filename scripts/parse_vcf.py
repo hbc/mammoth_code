@@ -76,7 +76,7 @@ with open(sys.argv[1]) as inh:
                 print >>outh, "chrom\tpos\tref\talt\tgene\tchange\t%s\t%s" % ("\t".join(samples), "\t".join(samples))
                 continue
             cols = line.split("\t")
-            chrom, pos, alt, ref = cols[0], cols[1], cols[3], cols[4]
+            chrom, pos, ref, alt = cols[0], cols[1], cols[3], cols[4]
             ann = cols[7]
             snpeff = [atr for atr in ann.split(";") if atr.startswith("ANN")]
             if not snpeff[0]:
@@ -90,4 +90,4 @@ with open(sys.argv[1]) as inh:
                     # print [chrom, pos]
                     gen = get_genotype(cols[9:])
                     flanks = get_flank(chrom, pos, samples, gen)
-                    print >>outh, "\t".join([chrom, pos, alt, ref, snpeff[3], snpeff[10]] + gen + flanks)
+                    print >>outh, "\t".join([chrom, pos, ref, alt, snpeff[3], snpeff[10]] + gen + flanks)

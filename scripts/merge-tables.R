@@ -1,9 +1,12 @@
+library(readr)
+library(dplyr)
+library(tidyr)
 
-lynch = read.csv("../test/Lynch_table.csv")
-wragel = read_delim("~/orch/scratch/church_mammoth/res_wrangel/changes.tsv", delim =" ")
-oimyako = read_delim("~/orch/scratch/church_mammoth/res_oimyako/changes.tsv", delim=" ")
-variants = read_delim("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", delim="\t")
-variants_seq = read_delim("~/orch/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", col_names = FALSE, delim="\t")
+lynch = read.csv("../table/Lynch_table.csv")
+wragel = read_delim("../../res_wrangel/changes.tsv", delim =" ")
+oimyako = read_delim("../../res_oimyako/changes.tsv", delim=" ")
+variants = read_delim("../../mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", delim="\t")
+variants_seq = read_delim("../../mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", col_names = FALSE, delim="\t")
 variants$african_region = variants_seq$X3
 variants = variants %>% distinct()
 
@@ -96,8 +99,8 @@ table_filtered = table %>%
 #filter(gene=="A2ML1") %>%
 #select(genome_pos, aa_ref, aa_pos, tx, exon, gene, wrangel_new_aa, oimyako_new_aa, vc_change)
 
-write.table(table_filtered %>% select(-id), "../test/all_genomes.xls", sep="\t", row.names=F)
+write.table(table_filtered %>% select(-id), "../table/all_genomes.xls", sep="\t", row.names=F)
 
 lynch$is_in_bcbio_analysis = lynch$id %in% variants$id
-write.table(lynch %>% select(-id), "../test/lynch_w_bcbio.xls", sep="\t", row.names=F)
+write.table(lynch %>% select(-id), "../table/lynch_w_bcbio.xls", sep="\t", row.names=F)
 

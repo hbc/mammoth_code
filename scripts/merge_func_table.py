@@ -4,9 +4,9 @@ import pybedtools
 import shutil
 from collections import defaultdict
 
-hg19="/home/lp113/scratch/church_mammoth/mammoth_code/test/ann/hg19_pos.bed"
-variants="../all_genomes.xls"
-ann="/home/lp113/scratch/church_mammoth/mammoth_code/test/ann/hg19_ann.txt"
+hg19="ann/hg19_pos.bed"
+variants="all_genomes.xls"
+ann="ann/hg19_ann.txt"
 
 hg19_map = {}
 with open(hg19) as inh:
