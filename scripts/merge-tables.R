@@ -1,4 +1,4 @@
-library(readr)
+
 lynch = read.csv("../test/Lynch_table.csv")
 wragel = read_delim("~/orch/scratch/church_mammoth/res_wrangel/changes.tsv", delim =" ")
 oimyako = read_delim("~/orch/scratch/church_mammoth/res_oimyako/changes.tsv", delim=" ")
@@ -13,8 +13,6 @@ lynch$id = paste0(lynch$loxodonta.scaffold, lynch$position.in.scaffold)
 variants$pos = variants$pos - 1
 variants$id = paste0(variants$chrom, variants$pos)
 
-library(dplyr)
-library(tidyr)
 all = full_join(wragel, oimyako, by="id")
 all_w_vc = full_join(all, variants, by="id")
 
@@ -103,21 +101,3 @@ write.table(table_filtered %>% select(-id), "../test/all_genomes.xls", sep="\t",
 lynch$is_in_bcbio_analysis = lynch$id %in% variants$id
 write.table(lynch %>% select(-id), "../test/lynch_w_bcbio.xls", sep="\t", row.names=F)
 
-# Parse functional table: remove duplicates, score again genomes, split column
-full = read_tsv("../test/all_genomes_fnc.xls")
-
-full_clean = full %>%
-    distinct(genome_pos, aa_ref, aa_pos, tx, exon, gene, wrangel_new_aa, oimyako_new_aa, .keep_all = TRUE) %>%
-    filter(wrangel_new_aa == oimyako_new_aa | is.na(oimyako_new_aa) | is.na(wrangel_new_aa)) %>%
-    separate(vc_change, into=c("vc_aa_ref","vc_aa_alt"),sep = "[0-9]+", remove = F,extra = "merge")
-
-full_clean$mammoth_genome = rowSums(data.frame(wr=!grepl("None", full_clean$Wrangel) & !is.na(full_clean$Wrangel),
-                                          oi=!grepl("None", full_clean$oimyakon) & !is.na(full_clean$oimyakon),
-                                          m4=!grepl("None", full_clean$M4) & !is.na(full_clean$M4),
-                                          m25=!grepl("None", full_clean$M25) & !is.na(full_clean$M25)))
-
-full_clean$asian_genome = rowSums(data.frame(  uno=!grepl("None", full_clean$Uno) & !is.na(full_clean),
-                                          asha=!grepl("None", full_clean$Asha) & !is.na(full_clean$Asha),
-                                          pa=!grepl("None", full_clean$Parvathy) & !is.na(full_clean$Parvathy)))
-
-write.table(full_clean, "../test/all_genomes_fnc_clean.xls", sep="\t", row.names=F)
