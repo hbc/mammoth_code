@@ -12,7 +12,7 @@ The command line used for both mammoth genomes are inside `analysis/blast`.
 ## Variant calling analysis
 
 All genomes were analyzed with bcbio-nextgen framework using the variant calling pipeline to detect the difference against
-the African genome. The config files to run bcbio are inside: `analysis/bcbio` folder.
+the African genome. The config files to run bcbio are inside: `analysis/bcbio` folder. All commands used are at `bcbio-nextgen-commands.log`.
 
 After this was done, we used the bash script `vcf_parsing.sh` to parse the final VCF in order to get all the information
 showed in the final table.
