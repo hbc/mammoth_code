@@ -27,3 +27,8 @@ showed in the final table.
  * `all_genome_ann.sh` will annotate mutation impact with dbNSFP mapping these variants to human variants
  * clean tables with `clean-table.R` script, producing the final output
 
+
+
+Note:
+Some scripts have hardcode full path, so this set of scripts are not designed to be automatically run from scratch.
+
