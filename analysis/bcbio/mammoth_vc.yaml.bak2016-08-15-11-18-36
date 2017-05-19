@@ -1,0 +1,75 @@
+details:
+- algorithm:
+    aligner: bwa
+    jointcaller: gatk-haplotype-joint
+    realign: false
+    recalibrate: false
+    variantcaller: gatk-haplotype
+  analysis: variant2
+  description: Asha
+  files:
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Asha_R1.fastq.gz
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Asha_R2.fastq.gz
+  genome_build: loxAfr3
+  metadata:
+    batch: batch1
+- algorithm:
+    aligner: bwa
+    jointcaller: gatk-haplotype-joint
+    realign: false
+    recalibrate: false
+    variantcaller: gatk-haplotype
+  analysis: variant2
+  description: M25
+  files:
+  - /n/data1/cores/bcbio/church_mammoth/fastq/M25_R1.fastq.gz
+  - /n/data1/cores/bcbio/church_mammoth/fastq/M25_R2.fastq.gz
+  genome_build: loxAfr3
+  metadata:
+    batch: batch1
+- algorithm:
+    aligner: bwa
+    jointcaller: gatk-haplotype-joint
+    realign: false
+    recalibrate: false
+    variantcaller: gatk-haplotype
+  analysis: variant2
+  description: M4
+  files:
+  - /n/data1/cores/bcbio/church_mammoth/fastq/M4_R1.fastq.gz
+  - /n/data1/cores/bcbio/church_mammoth/fastq/M4_R2.fastq.gz
+  genome_build: loxAfr3
+  metadata:
+    batch: batch1
+- algorithm:
+    aligner: bwa
+    jointcaller: gatk-haplotype-joint
+    realign: false
+    recalibrate: false
+    variantcaller: gatk-haplotype
+  analysis: variant2
+  description: Parvathy
+  files:
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Parvathy_R1.fastq.gz
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Parvathy_R2.fastq.gz
+  genome_build: loxAfr3
+  metadata:
+    batch: batch1
+- algorithm:
+    aligner: bwa
+    jointcaller: gatk-haplotype-joint
+    realign: false
+    recalibrate: false
+    variantcaller: gatk-haplotype
+  analysis: variant2
+  description: Uno
+  files:
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Uno_R1.fastq.gz
+  - /n/data1/cores/bcbio/church_mammoth/fastq/Uno_R2.fastq.gz
+  genome_build: loxAfr3
+  metadata:
+    batch: batch1
+fc_date: '2016-08-08'
+fc_name: mammoth_vc
+upload:
+  dir: ../final
