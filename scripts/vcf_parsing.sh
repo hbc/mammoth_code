@@ -1,4 +1,8 @@
-cd ~/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1
+# argument to be fiving to bash script: ~/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1
+cd $1
+SOURCE=`dirname $0`
+PYTHON="~/scratch/church_mammoth/conda/bin/"
+
 mkdir split && cd split
 mkdir log
 
@@ -13,7 +17,7 @@ for F in `ls x* | grep -v tsv | grep -v "\.h"` ; do
     `cat header $F > $F.h`
     if [ ! -e $F"-parsed-flank.tsv"  ] ; then
         # echo do
-        bsub -oo log/$F.o -W 10:00 -R "rusage[mem=8000]" -n  2 -q parallel  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/parse_vcf.py $F.h
+        bsub -oo log/$F.o -W 10:00 -R "rusage[mem=8000]" -n  2 -q parallel  $PYTHON/python $SOURCE/parse_vcf.py $F.h
     fi
 done
 
@@ -24,15 +28,15 @@ cat <(grep -w chrom xab-parsed-flank.tsv)  <( cat merged-parsed-flank.tsv) > mer
 
 awk '{start=$2-150; if (start<0){start=0}; print $1"\t"$2-150"\t"$2+150}' ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf |grep -v "##" > merged.bed
 
-bsub -eo log/fasta.o -W 40:00 -R "rusage[mem=8000]" -n  2 -q parallel  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/get_african_sequence.py
+bsub -eo log/fasta.o -W 40:00 -R "rusage[mem=8000]" -n  2 -q parallel  $PYTHON/python $SOURCE/get_african_sequence.py
 
 # convert to human to use snpsniff
 grep -v "^#"  ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf | awk '{print $1"\t"$2"\t"$2+1"\t"$1":"$2}' > vcf_pos.bed
 
 # get exact genotype
-bsub -eo log/genotype.o -W 40:00 -R "rusage[mem=8000]" -n  1 -q priority  ~/scratch/church_mammoth/conda/bin/python ~/scratch/church_mammoth/mammoth_code/scripts/parse_vcf_genotype.py ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf
+bsub -eo log/genotype.o -W 40:00 -R "rusage[mem=8000]" -n  1 -q priority  $PYTHON/python $SOURCE/parse_vcf_genotype.py ../batch1-joint-effects-filterSNP-filterINDEL-gatkclean.vcf
 
-cd ~/scratch/church_mammoth/mammoth_code/table
+cd $SOURCE/../table
 Rscript ../scripts/merge-tables.R
 bash all_genome_ann.sh
 Rscript ../scripts/clean-tables.R
