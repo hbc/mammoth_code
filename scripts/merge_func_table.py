@@ -5,7 +5,7 @@ import shutil
 from collections import defaultdict
 
 hg19="ann/hg19_pos.bed"
-variants="all_genomes.xls"
+variants="all_23genomes.xls"
 ann="ann/hg19_ann.txt"
 
 hg19_map = {}
@@ -54,7 +54,7 @@ with open(variants) as inh:
             print "\t".join(line.strip().split("\t") + ["polyphen2"])
             continue
         cols=[c.replace("\"", "") for c in line.strip().split("\t")]
-        chrom, pos=cols[8], int(cols[9])
+        chrom, pos = cols[0], int(cols[1])
         idx = "%s:%s" % (chrom.replace("\"", ""), pos)
         score = "NA"
         if idx in hg19_map:

@@ -5,8 +5,8 @@ library(tidyr)
 lynch = read.csv("../table/Lynch_table.csv")
 wragel = read_delim("../../res_wrangel/changes.tsv", delim =" ")
 oimyako = read_delim("../../res_oimyako/changes.tsv", delim=" ")
-variants = read_delim("../../mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv", delim="\t")
-variants_seq = read_delim("../../mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged.fa", col_names = FALSE, delim="\t")
+variants = read_delim("../../final/2017-09-06_elephants/split/merged-parsed-flank-wheader.tsv", delim="\t")
+variants_seq = read_delim("../../final/2017-09-06_elephants/split/merged.fa", col_names = FALSE, delim="\t")
 variants$african_region = variants_seq$X3
 variants = variants %>% distinct()
 

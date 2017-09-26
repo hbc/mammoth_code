@@ -3,8 +3,8 @@ import sys
 import pybedtools
 import shutil
 
-genome="/groups/bcbio/bcbio/genomes/Lafricana/loxAfr3/seq/loxAfr3.fa"
-size="/groups/bcbio/bcbio/genomes/Lafricana/loxAfr3/seq/loxAfr3.fa.fai"
+genome="/n/groups/bcbio/bcbio/genomes/Lafricana/loxAfr3/seq/loxAfr3.fa"
+size="/n/groups/bcbio/bcbio/genomes/Lafricana/loxAfr3/seq/loxAfr3.fa.fai"
 fai = dict()
 with open(size) as inh:
     for line in inh:
@@ -12,7 +12,7 @@ with open(size) as inh:
         chrom, size = cols[0], int(cols[1])
         fai[chrom] = size
 
-variants="/home/lp113/scratch/church_mammoth/mammoth_vc/work/joint/gatk-haplotype-joint/batch1/split/merged-parsed-flank-wheader.tsv"
+variants=sys.argv[1]
 # variants="../test/data/test.vcf"
 def _get_cache(fn):
     cache = {}

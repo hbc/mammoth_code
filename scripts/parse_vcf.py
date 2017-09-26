@@ -35,7 +35,7 @@ def get_flank(chrom, pos, names, gen):
         if gen[i] != "Hom":
             flank_list.append("None")
             continue
-        bam = os.path.join("~/scratch/church_mammoth/mammoth_vc/work/align", sample, "%s-sort.bam" % sample)
+        bam = os.path.join(os.environ['PATHROOT'], "final", sample, "%s-ready.bam" % sample)
         pre = int(pos) - 80
         first = get_seq(chrom, pre, bam)
         second = get_seq(chrom, pos, bam)
@@ -54,6 +54,9 @@ def _get_cache(fn):
             idx = "%s%s" % (cols[0], cols[1])
             cache[idx] = line
     return cache
+
+if "PATHROOT" not in os.environ:
+    raise ValueError("No PATHROOT found in %s" % os.environ.keys())
 
 out = "%s-parsed-flank.tsv" % (os.path.splitext(sys.argv[1])[0])
 
