@@ -1,0 +1,10 @@
+details:
+  - analysis: variant2
+    genome_build: loxAfr3
+    algorithm:
+      aligner: bwa
+      recalibrate: false
+      realign: false
+      variantcaller: gatk-haplotype
+      jointcaller: gatk-haplotype-joint
+      variant_regions: ~/scratch/church_mammoth/exon_targeted.bed

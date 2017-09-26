@@ -22,7 +22,7 @@ full_clean$asian_genome = rowSums(data.frame(  uno=!grepl("None", full_clean$Uno
                                                asha=!grepl("None", full_clean$Asha) & !is.na(full_clean$Asha),
                                                pa=!grepl("None", full_clean$Parvathy) & !is.na(full_clean$Parvathy)))
 
-full_clean_gen = inner_join(full_clean %>% mutate(id=paste0(chrom, genome_pos)),
+full_clean_gen = left_join(full_clean %>% mutate(id=paste0(chrom, genome_pos)),
                             variants_genotype %>% mutate(id=paste0(chrom, pos)) %>%
                                 select(-chrom, -pos) %>%
                                 rename(Asha_G=Asha, M25_G=M25, M4_G=M4,
