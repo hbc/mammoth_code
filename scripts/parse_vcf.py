@@ -19,13 +19,15 @@ def get_seq(chrom, pos, bam):
     """use samtools to get consensus"""
     tmp = "tmp.samtools"
     cmd = "samtools tview -d T -p {0}:{1} {2}".format(chrom, pos, bam)
+    # print cmd
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     # process.communicate()
     inh = process.stdout
     # process.stdout.close()
     pos = inh.readline()
     ref = inh.readline()
-    seq = inh.readline().strip()
+    seq = inh.readline().replace(" ", "N")[:-1]
+    # print seq
     inh.close()
     return seq
 
@@ -35,13 +37,22 @@ def get_flank(chrom, pos, names, gen):
         if gen[i] != "Hom":
             flank_list.append("None")
             continue
-        bam = os.path.join(os.environ['PATHROOT'], "final", sample, "%s-ready.bam" % sample)
-        pre = int(pos) - 80
-        first = get_seq(chrom, pre, bam)
-        second = get_seq(chrom, pos, bam)
+        bam = os.path.join(os.environ['PATHROOT'], "elephants", sample, "%s-ready.bam" % sample)
+        pre = int(pos) - (80 * 6)
+        post = int(pos)
+        first = ""
+        second = ""
+        # print [pre, pos, post]
+        while pre < int(pos):
+            first += get_seq(chrom, pre, bam)
+            pre += 80
+        while post < int(pos) + (80 * 6):
+            second += get_seq(chrom, post, bam)
+            post += 80
         flank = "NoInfo"
         if len(second) > 2:
             flank = "%s-%s-%s" % (first.replace(" ", "X"), second[0], second[1:].replace(" ", "X"))
+        # print flank
         flank_list.append(flank)
     return flank_list
 

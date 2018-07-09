@@ -43,8 +43,8 @@ with open(out_file, "w") as outh:
                 print >>outh, cache[idx]
                 continue
 
-            start = 0 if pos - 150 < 0 else pos - 150
-            end = fai[chrom] - 1 if pos + 150 - 1 > fai[chrom] else pos + 150 - 1
+            start = 0 if pos - 1000 < 0 else pos - 1000
+            end = fai[chrom] - 1 if pos + 1000 - 1 > fai[chrom] else pos + 1000 - 1
             a = pybedtools.BedTool("{0}\t{1}\t{2}".format(chrom, start, end), from_string=True)
             fasta = pybedtools.example_filename(genome)
             a = a.sequence(fi=fasta)

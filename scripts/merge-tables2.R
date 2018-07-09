@@ -3,8 +3,8 @@ library(dplyr)
 library(tidyr)
 
 lynch = read.csv("../table/Lynch_table.csv")
-variants = read_delim("../../final/2017-09-06_elephants/split/merged-parsed-flank-wheader.tsv", delim="\t")
-variants_seq = read_delim("../../final/2017-09-06_elephants/split/merged.fa", col_names = FALSE, delim="\t")
+variants = read_delim("../../elephants/2017-09-06_elephants/split/merged-parsed-flank-wheader.tsv", delim="\t")
+variants_seq = read_delim("../../elephants/2017-09-06_elephants/split/merged.fa", col_names = FALSE, delim="\t")
 variants$african_region = variants_seq$X3
 variants = variants %>% distinct()
 
