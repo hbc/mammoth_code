@@ -18,9 +18,11 @@ with open(sys.argv[1]) as inh:
                 continue
             if line.startswith("#CHROM"):
                 samples = line.split()[9:]
-                print >>outh, "chrom\tpos\tref\talt\ttype\timpact\tgene\tprotein\twarning"
+                print >>outh, "chrom\tpos\tref\talt\tdepth\taf\ttype\timpact\tgene\tprotein\twarning"
                 continue
             cols = line.split("\t")
+            depth = [info.split("=")[1] for info in cols[7].split(";") if info.startswith("DP")][0]
+            af = [info.split("=")[1] for info in cols[7].split(";") if info.startswith("AF")][0]
             chrom, pos, ref, alt = cols[0], cols[1], cols[3], cols[4]
             ann = cols[7]
             snpeff = [atr for atr in ann.split(";") if atr.startswith("ANN")]
@@ -28,4 +30,4 @@ with open(sys.argv[1]) as inh:
                 continue
             snpeff = snpeff[0].split("|")
             if snpeff[1].find("missense") > -1 or snpeff[1].find("stop") > -1:
-                print >>outh, "\t".join([chrom, pos, ref, alt, snpeff[1], snpeff[2], snpeff[3], snpeff[10], snpeff[15]])
+                print >>outh, "\t".join([chrom, pos, ref, alt, depth, af, snpeff[1], snpeff[2], snpeff[3], snpeff[10], snpeff[15]])
