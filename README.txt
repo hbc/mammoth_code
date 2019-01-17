@@ -4,7 +4,7 @@ mammoth
 
 Package created to help Church's Lab to find changes in Mammoth genomes.
 
-## blast based analysis
+## blast based analysis (this is not longer used)
 
 We developed a python package to blast all African genes to the assembled genomes.
 The command line used for both mammoth genomes are inside `analysis/blast`.
