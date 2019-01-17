@@ -23,9 +23,9 @@ showed in the final table.
   * all small files are merged together to have the full list of variants in one file again
  * script to get the African sequences for all the variants with flank regions (`get_african_sequence.py`)
  * script to get the genotype right, when there are multiple alleles, or missing information (`parse_vcf_genotpye.py`)
- * create table with R script `merge-tables.R` merging the bcbio/blast analysis
+ * create table with R script `merge-tables2.R` merging the bcbio analysis with flank regions and genotype output from previous scripts
  * `all_genome_ann.sh` will annotate mutation impact with dbNSFP mapping these variants to human variants
- * clean tables with `clean-table.R` script, producing the final output
+ * clean tables with `clean-table2.R` script, producing the final output
 
 
 
